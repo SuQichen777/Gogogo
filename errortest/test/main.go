@@ -19,8 +19,14 @@ func checkError(testData []int) error {
 	}
 	return  nil
 }
+
+
 func main(){
+	fmt.Println("基础 测试")
 	testData1 := [3]int{errorTestConst1, errorTestConst2, errorTestConst3}
 	err := checkError(testData1[:])
 	fmt.Println(err)
+	fmt.Println("---------------------------------------")
+	fmt.Println("Join 测试")
+	errortest.GetJoinError()
 }
