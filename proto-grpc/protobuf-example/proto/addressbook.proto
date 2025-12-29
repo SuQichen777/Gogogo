@@ -1,0 +1,53 @@
+// 在Gogogo\proto-grpc\protobuf-example目录下跑：
+// protoc -I proto --go_out=proto --go_opt=paths=source_relative --go-grpc_out=proto --go-grpc_opt=paths=source_relative proto\addressbook.proto
+syntax = "proto3";
+package testGo;
+// go_package 的设计初衷是为了解决 “生成的代码该叫什么名字” （分号前）
+// 和 “代码在 Go 模块中如何被引用” （分号后）这两个问题。
+
+// 而分号后的addressbook则就是生成的 .pb.go 文件第一行写的 package XXX
+// 即package addressbook
+// 默认值：如果你不写分号及其后面的内容，编译器会默认取路径的最后一个单词作为包名。
+option go_package = "Gogogo/proto-grpc/protobuf-example/proto/testGo;testGo";
+
+
+import "google/protobuf/timestamp.proto";
+// 在所有使用的tag里1-15“ one less byte to encode than higher number”
+// 所以应该尽量使用1-15作为tag来给常用或者数组elements
+// 对于repeated类型而言字段内的每个元素都要重新编码tag，所以特别适合进行这种优化
+// 而16或higher给less-commonly used optional elements
+message Person {
+    string name = 1;
+    int32 id = 2;
+    string email = 3;
+
+    // 嵌套消息 PhoneNumber: Person 
+    // 内部定义了一个专门处理电话号码的小结构
+    // 包含号码字符串和号码类型。
+    message PhoneNumber {
+        string number = 1;
+        PhoneType type = 2;
+    }
+
+    // repeated 关键字
+    // 表示这是一个数组或列表。意味着一个人可以拥有多个电话号码
+    repeated PhoneNumber phones = 4;
+    // 使用了上方import的import "google/protobuf/timestamp.proto";
+    google.protobuf.Timestamp last_updated = 5;
+}
+
+// enum PhoneType 定义了一组预设的常量
+// 在 Protobuf 中，枚举必须以 0 开始，作为默认值
+enum PhoneType {
+  PHONE_TYPE_UNSPECIFIED = 0;
+  PHONE_TYPE_MOBILE = 1;
+  PHONE_TYPE_HOME = 2;
+  PHONE_TYPE_WORK = 3;
+}
+
+// AddressBook它是最高层级的容器
+// 包含了一个 Person 类型的列表（repeated）。
+// 这代表整个通讯录文件可以存储多个人的信息。
+message AddressBook {
+    repeated Person people = 1;
+}
