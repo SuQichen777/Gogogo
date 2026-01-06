@@ -9,6 +9,7 @@ services:
     command: sh -c "python app.py >> /var/log/app.log"
   loki:
     image: grafana/loki:2.9.0
+    container_name: loki
     command: -config.file=/etc/loki/config.yaml
     volumes:
       - ./loki-config.yaml:/etc/loki/config.yaml
@@ -20,9 +21,13 @@ services:
     command: -config.file=/etc/promtail/config.yaml
     volumes:
       - ./promtail-config.yaml:/etc/promtail/config.yaml
+      - ./positions.yaml:/etc/promtail/positions.yaml
       - ./logs:/var/log
+    ports:
+      - "9080:9080"
 
   grafana:
     image: grafana/grafana:10.4.0
+    container_name: grafana
     ports:
       - "3000:3000"

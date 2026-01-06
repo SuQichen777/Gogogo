@@ -15,3 +15,9 @@ Grafana: 负责可视化与查询日志。
 http://localhost:3000
 ```
 进入 Grafana 管理页面，在 Connection 中添加 Loki，链接为 `http://loki:3100`。
+
+### Web可视化
+- Promtail: http://localhost:9080/
+- Grafana: http://localhost:3000
+
+这是在对应yaml配置中选择监听端口和在`docker-compose.yaml`中转发端口的结果。如果需要改变监听端口，可以在对应文件中改变yaml配置，按需选择`docker-compose up -d --force-recreate [name]`
