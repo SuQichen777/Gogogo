@@ -2,14 +2,14 @@ server:
   http_listen_address: 0.0.0.0
   http_listen_port: 9080 # 在docker-compose里转发端口
   # 可以直接通过 http://localhost:9080/来访问
-  
+
 # 推送给Loki
 clients:
   - url: http://loki:3100/loki/api/v1/push
 
 # 位置记录（“读到了哪里”）防止重复读取
 positions:
-  filename: /etc/promtail/positions.yaml
+  filename: /tmp/positions.yaml
 
 # 发现日志源
 scrape_configs:

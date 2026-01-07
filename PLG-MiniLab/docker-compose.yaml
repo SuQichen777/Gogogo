@@ -13,21 +13,25 @@ services:
     command: -config.file=/etc/loki/config.yaml
     volumes:
       - ./loki-config.yaml:/etc/loki/config.yaml
+      - ./data/loki:/loki           # Loki 数据持久化
     ports:
       - "3100:3100"
 
   promtail:
     image: grafana/promtail:2.9.0
+    container_name: promtail
     command: -config.file=/etc/promtail/config.yaml
     volumes:
       - ./promtail-config.yaml:/etc/promtail/config.yaml
-      - ./positions.yaml:/etc/promtail/positions.yaml
       - ./logs:/var/log
+      - ./data/promtail:/tmp              # 保存 positions防止重启后重复读取
     ports:
       - "9080:9080"
 
   grafana:
     image: grafana/grafana:10.4.0
     container_name: grafana
+    volumes:
+      - ./data/grafana:/var/lib/grafana   # Grafana 数据持久化
     ports:
       - "3000:3000"

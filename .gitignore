@@ -27,6 +27,10 @@ go.work.sum
 # env file
 .env
 
+# PLG-MiniLab runtime data
+PLG-MiniLab/data/
+PLG-MiniLab/logs/
+
 # Editor/IDE
 # .idea/
 # .vscode/
